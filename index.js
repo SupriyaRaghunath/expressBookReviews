@@ -6,16 +6,17 @@ const genl_routes = require("./router/general.js").general;
 
 const app = express();
 
-app.use(express.json());
-
 app.use(
   "/customer",
   session({
     secret: "fingerprint_customer",
-    resave: true,
+    resave: false,
     saveUninitialized: true,
+    cookie: { secure: false, maxAge: 24 * 60 * 60 * 1000 },
   })
 );
+
+app.use(express.json());
 
 app.use("/customer/auth/*", function auth(req, res, next) {
   if (req.session.authorization) {
